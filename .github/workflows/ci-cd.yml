@@ -34,6 +34,7 @@ jobs:
 
       - name: Build Docker image
         run: |
+          echo "Building Docker image for repository: ${{ env.REPO_NAME }}"
           docker build -t ${{ env.REPO_NAME }}:${{ github.sha }} .
 
       - name: Login to Docker Registry
