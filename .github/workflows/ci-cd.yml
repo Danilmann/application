@@ -37,7 +37,6 @@ jobs:
           echo "ENVIRONMENT=${environment}" >> $GITHUB_ENV
           echo "Проверка экспорта переменных:"
           echo "REPO_NAME=${repository_name}"
-          echo "REPO_NAME=${repository_name}"
           echo "ENVIRONMENT=${environment}"
 
       - name: Log all environment variables
