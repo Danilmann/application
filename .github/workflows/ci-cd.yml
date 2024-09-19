@@ -26,16 +26,17 @@ jobs:
           ./scripts/parse-file.sh ./pars-file
           echo "REPO_NAME=${repository_name}" >> $GITHUB_ENV
           echo "ENVIRONMENT=${environment}" >> $GITHUB_ENV
+          echo "Проверка экспорта переменных:"
+          echo "REPO_NAME=${repository_name}"
+          echo "ENVIRONMENT=${environment}"
 
-      - name: Log variables
-        run: |
-          echo "Repository Name: ${{ env.REPO_NAME }}"
-          echo "Environment: ${{ env.ENVIRONMENT }}"
+      - name: Log all environment variables
+        run: printenv | sort
 
       - name: Build Docker image
         run: |
           echo "Building Docker image for repository: ${{ env.REPO_NAME }}"
-          docker build -t ${{ env.REPO_NAME }}:${{ github.sha }} .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:${{ github.sha }} .
 
       - name: Login to Docker Registry
         run: |
@@ -43,7 +44,7 @@ jobs:
 
       - name: Push Docker image
         run: |
-          docker tag ${{ env.REPO_NAME }}:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:${{ github.sha }}
+          docker tag ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:${{ github.sha }}
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:${{ github.sha }}
 
       - name: Pull Docker image
