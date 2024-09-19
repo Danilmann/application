@@ -20,6 +20,15 @@ jobs:
           path: scripts
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Проверка пути к скрипту
+        run: |
+          echo "Текущий путь:"
+          pwd
+          echo "Содержимое директории:"
+          ls -l
+          echo "Содержимое директории scripts:"
+          ls -l scripts
+
       - name: Parse file for variables
         run: |
           chmod +x scripts/parse-file.sh
