@@ -66,3 +66,9 @@ jobs:
       - name: Deploy Docker container
         run: |
           docker run -d --name ${{ env.REPO_NAME }} -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:${{ github.sha }}
+
+      - name: Проверка доступности контейнера
+        run: |
+          echo "Проверка доступности приложения на порту 3000"
+          sleep 10  # Даем время контейнеру подняться
+          curl --fail http://localhost:3000 || (echo "Приложение не доступно на порту 3000" && exit 1)
