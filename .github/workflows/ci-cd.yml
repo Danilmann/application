@@ -55,8 +55,9 @@ jobs:
 
       - name: Push Docker image
         run: |
-          docker tag ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:${{ github.sha }}
+          docker tag ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:latest
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:${{ github.sha }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:latest
 
       - name: Pull Docker image
         run: |
