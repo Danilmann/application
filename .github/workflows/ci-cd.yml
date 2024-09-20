@@ -65,4 +65,4 @@ jobs:
 
       - name: Deploy Docker container
         run: |
-          docker run -d --name ${{ env.REPO_NAME }} -p 80:3000 ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:${{ github.sha }}
+          docker run -d --name ${{ env.REPO_NAME }} -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:${{ github.sha }}
