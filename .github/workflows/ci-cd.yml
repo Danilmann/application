@@ -33,8 +33,9 @@ jobs:
         run: |
           chmod +x scripts/parse-file.sh
           ./scripts/parse-file.sh ./pars-file
+          # Экспорт переменных в среду GitHub
+          source ./GITHUB_ENV
           echo "REPO_NAME=${repository_name}" >> $GITHUB_ENV
-          echo "ENVIRONMENT=${environment}" >> $GITHUB_ENV
           echo "ENVIRONMENT=${environment}" >> $GITHUB_ENV
           echo "Проверка экспорта переменных:"
           echo "REPO_NAME=${repository_name}"
