@@ -37,9 +37,13 @@ jobs:
           source ./GITHUB_ENV
           echo "REPO_NAME=${repository_name}" >> $GITHUB_ENV
           echo "ENVIRONMENT=${environment}" >> $GITHUB_ENV
+          echo "APPLICATION=${application}" >> $GITHUB_ENV
+          echo "TAG=${tag}" >> $GITHUB_ENV
           echo "Проверка экспорта переменных:"
           echo "REPO_NAME=${repository_name}"
           echo "ENVIRONMENT=${environment}"
+          echo "APPLICATION=${application}"
+          echo "TAG=${tag}"
 
       - name: Log all environment variables
         run: printenv | sort
@@ -70,5 +74,5 @@ jobs:
       - name: Проверка доступности контейнера
         run: |
           echo "Проверка доступности приложения на порту 3000"
-          sleep 10  # Даем время контейнеру подняться
+          sleep 10  
           curl --fail http://localhost:3000 || (echo "Приложение не доступно на порту 3000" && exit 1)

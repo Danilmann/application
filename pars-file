@@ -1,2 +1,4 @@
-repository_name=myapp
+repository_name=my-repo
 environment=production
+application=my-app
+tag=v1.0.0
