@@ -50,8 +50,8 @@ jobs:
 
       - name: Build Docker image
         run: |
-          echo "Building Docker image for repository: ${{ env.REPO_NAME }}"
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:${{ github.sha }} .
+          echo "Building Docker image for application: ${{ env.APPLICATION }}"
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}/${{ env.APPLICATION }}:${{ env.TAG }} .
 
       - name: Login to Docker Registry
         run: |
