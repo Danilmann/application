@@ -51,7 +51,7 @@ jobs:
       - name: Build Docker image
         run: |
           echo "Building Docker image for application: ${{ env.APPLICATION }}"
-          docker build -t ${{ env.REPO_NAME }}/${{ env.APPLICATION }}:${{ env.TAG }} .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}/${{ env.APPLICATION }}:${{ env.TAG }} .
 
       - name: Login to Docker Registry
         run: |
@@ -59,7 +59,7 @@ jobs:
 
       - name: Push Docker image
         run: |
-          docker push ${{ env.REPO_NAME }}/${{ env.APPLICATION }}:${{ env.TAG }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}/${{ env.APPLICATION }}:${{ env.TAG }}
 
       - name: Pull Docker image
         run: |
