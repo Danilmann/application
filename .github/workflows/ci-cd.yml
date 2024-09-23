@@ -59,9 +59,11 @@ jobs:
 
       - name: Push Docker image
         run: |
-          docker tag ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:latest
-          docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:${{ github.sha }}
-          docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:latest
+          # Добавляем два тега к образу: ${env.TAG} и latest
+          docker tag ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}/${{ env.APPLICATION }}:${{ env.TAG }} ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}/${{ env.APPLICATION }}:latest
+          # Пушим оба тега в реестр
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}/${{ env.APPLICATION }}:${{ env.TAG }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}/${{ env.APPLICATION }}:latest
 
       - name: Pull Docker image
         run: |
