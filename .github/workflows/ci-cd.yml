@@ -65,6 +65,11 @@ jobs:
         run: |
           docker pull ${{ env.REPO_NAME }}/${{ env.APPLICATION }}:${{ env.TAG }}
 
+      - name: Test Docker container
+        run: |
+          docker run --rm --name test-container ${{ env.REPO_NAME }}/${{ env.APPLICATION }}:${{ env.TAG }} \
+          && echo "Docker image is working as expected."
+
       - name: Deploy Docker container
         run: |
           docker run -d --name ${{ env.APPLICATION }} -p 3000:3000 ${{ env.REPO_NAME }}/${{ env.APPLICATION }}:${{ env.TAG }}
