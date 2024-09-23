@@ -50,8 +50,8 @@ jobs:
 
       - name: Build Docker image
         run: |
-          echo "Building Docker image for repository: ${{ env.REPO_NAME }}"
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:${{ github.sha }} .
+          echo "Building Docker image for repository: ${{ env.REPO_NAME }}, application: ${{ env.APPLICATION }}, tag: ${{ env.TAG }}"
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}/${{ env.APPLICATION }}:${{ env.TAG }} .
 
       - name: Login to Docker Registry
         run: |
@@ -59,17 +59,18 @@ jobs:
 
       - name: Push Docker image
         run: |
-          docker tag ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:latest
-          docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:${{ github.sha }}
-          docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:latest
+          # Тегирование и пуш Docker образа с использованием всех переменных
+          docker tag ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}/${{ env.APPLICATION }}:${{ env.TAG }} ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}/${{ env.APPLICATION }}:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}/${{ env.APPLICATION }}:${{ env.TAG }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}/${{ env.APPLICATION }}:latest
 
       - name: Pull Docker image
         run: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:${{ github.sha }}
+          docker pull ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}/${{ env.APPLICATION }}:${{ env.TAG }}
 
       - name: Deploy Docker container
         run: |
-          docker run -d --name ${{ env.REPO_NAME }} -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:${{ github.sha }}
+          docker run -d --name ${{ env.APPLICATION }} -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}/${{ env.APPLICATION }}:${{ env.TAG }}
 
       - name: Проверка доступности контейнера
         run: |
