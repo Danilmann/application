@@ -50,8 +50,8 @@ jobs:
 
       - name: Build Docker image
         run: |
-          echo "Building Docker image for repository: my-repo, application: my-app"
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/my-repo/my-app:${{ env.TAG }} .
+          echo "Building Docker image for repository: ${{ env.REPO_NAME }}"
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:${{ github.sha }} .
 
       - name: Login to Docker Registry
         run: |
@@ -59,28 +59,17 @@ jobs:
 
       - name: Push Docker image
         run: |
-          # Добавляем два тега: ${env.TAG} и latest
-          docker tag ${{ secrets.DOCKER_USERNAME }}/my-repo/my-app:${{ env.TAG }} ${{ secrets.DOCKER_USERNAME }}/my-repo/my-app:latest
-          # Пушим образ с тегом, соответствующим переменной TAG
-          docker push ${{ secrets.DOCKER_USERNAME }}/my-repo/my-app:${{ env.TAG }}
-          # Пушим образ с тегом latest
-          docker push ${{ secrets.DOCKER_USERNAME }}/my-repo/my-app:latest
+          docker tag ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:${{ github.sha }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:latest
 
       - name: Pull Docker image
         run: |
-          echo "Pulling Docker image for my-app with tag: ${{ env.TAG }}"
-          docker pull ${{ secrets.DOCKER_USERNAME }}/my-repo/my-app:${{ env.TAG }}
+          docker pull ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:${{ github.sha }}
 
       - name: Deploy Docker container
         run: |
-          # Проверяем наличие контейнера и удаляем, если он существует
-          docker ps -a -q --filter "name=my-app" | grep -q . && docker stop my-app && docker rm my-app || true
-          # Запускаем контейнер с нужным образом
-          docker run -d --name my-app -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/my-repo/my-app:${{ env.TAG }}
-          # Проверяем доступность контейнера
-          sleep 10
-          curl --fail http://localhost:3000 || (echo "Application is not accessible on port 3000" && exit 1)
-      
+          docker run -d --name ${{ env.REPO_NAME }} -p 3000:3000 ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:${{ github.sha }}
 
       - name: Проверка доступности контейнера
         run: |
